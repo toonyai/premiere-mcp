@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MCP Bridge</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MCP Bridge</h1>
+        <div id="status" class="status disconnected">
+            <span class="indicator"></span>
+            <span class="text">Disconnected</span>
+        </div>
+        <div class="info">
+            <p>Port: <span id="port">8847</span></p>
+            <p>Commands: <span id="commandCount">0</span></p>
+        </div>
+        <div id="log" class="log"></div>
+    </div>
+
+    <!-- Load CSInterface -->
+    <script src="js/CSInterface.js"></script>
+    <!-- Load WebSocket server -->
+    <script src="js/websocket-server.js"></script>
+    <!-- Load main panel script -->
+    <script src="js/main.js"></script>
+</body>
+</html>

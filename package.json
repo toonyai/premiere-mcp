@@ -1,0 +1,48 @@
+{
+  "name": "premiere-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for editing videos in Adobe Premiere Pro using speech and visual analysis",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "premiere-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "premiere-pro",
+    "video-editing",
+    "whisper",
+    "claude-vision"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^11.0.0",
+    "ffmpeg-extract-frames": "^2.0.2",
+    "fluent-ffmpeg": "^2.1.3",
+    "nodejs-whisper": "^0.1.17",
+    "uuid": "^10.0.0",
+    "ws": "^8.18.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/fluent-ffmpeg": "^2.1.0",
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.5.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.0.0"
+  }
+}
