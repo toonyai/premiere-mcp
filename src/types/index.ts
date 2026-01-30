@@ -100,6 +100,82 @@ export interface AnalysisStatus {
   completedAt?: number;
 }
 
+// Color Correction Types
+export interface ColorCorrections {
+  exposure?: number;
+  contrast?: number;
+  highlights?: number;
+  shadows?: number;
+  whites?: number;
+  blacks?: number;
+  temperature?: number;
+  tint?: number;
+  saturation?: number;
+  vibrance?: number;
+  faded_film?: number;
+  sharpen?: number;
+}
+
+export interface ColorCorrectionResult {
+  success: boolean;
+  target?: string;
+  appliedCorrections?: ColorCorrections;
+  usedAdjustmentLayer?: boolean;
+  error?: string;
+}
+
+export interface ColorCorrectionRangeResult {
+  success: boolean;
+  target?: string;
+  clipsAffected?: string[];
+  appliedCorrections?: ColorCorrections;
+  adjustmentLayerTrack?: number;
+  error?: string;
+}
+
+export interface ColorMatchResult {
+  success: boolean;
+  sourceClip?: string;
+  destinationClip?: string;
+  adjustmentLayer?: string;
+  copiedSettings?: ColorCorrections;
+  error?: string;
+}
+
+export interface ColorMatchToAllResult {
+  success: boolean;
+  sourceClip?: string;
+  adjustmentLayer?: string;
+  clipsMatched?: string[];
+  copiedSettings?: ColorCorrections;
+  adjustmentLayerTrack?: number;
+  error?: string;
+}
+
+export interface LutResult {
+  success: boolean;
+  target?: string;
+  lutName?: string;
+  intensity?: number;
+  error?: string;
+}
+
+export interface ColorSettingsResult {
+  success: boolean;
+  target?: string;
+  hasLumetri?: boolean;
+  settings?: ColorCorrections;
+  appliedLut?: string;
+  error?: string;
+}
+
+export interface RemoveColorEffectsResult {
+  success: boolean;
+  target?: string;
+  effectsRemoved?: string[];
+  error?: string;
+}
+
 // Premiere Bridge Types
 export interface PremiereCommand {
   id: string;
@@ -109,6 +185,13 @@ export interface PremiereCommand {
     | "getProjectInfo"
     | "getSequenceInfo"
     | "findProjectItem"
+    | "applyColorCorrection"
+    | "applyColorCorrectionToRange"
+    | "matchColor"
+    | "matchColorToAll"
+    | "applyLut"
+    | "getColorSettings"
+    | "removeColorEffects"
     | "ping";
   params: Record<string, unknown>;
 }

@@ -5,6 +5,14 @@ import type {
   PremiereResponse,
   ProjectInfo,
   TimelineInsertResult,
+  ColorCorrections,
+  ColorCorrectionResult,
+  ColorCorrectionRangeResult,
+  ColorMatchResult,
+  ColorMatchToAllResult,
+  LutResult,
+  ColorSettingsResult,
+  RemoveColorEffectsResult,
 } from "../types/index.js";
 import { logger } from "../utils/logger.js";
 
@@ -229,6 +237,203 @@ class PremiereBridge {
     });
 
     return response.success && response.data !== null;
+  }
+
+  async applyColorCorrection(
+    targetType: "timeline_clip" | "project_item",
+    corrections: ColorCorrections,
+    targetPath?: string,
+    trackIndex?: number,
+    clipIndex?: number,
+    useAdjustmentLayer: boolean = true
+  ): Promise<ColorCorrectionResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "applyColorCorrection",
+      params: {
+        targetType,
+        corrections,
+        targetPath,
+        trackIndex,
+        clipIndex,
+        useAdjustmentLayer,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to apply color correction",
+      };
+    }
+
+    return response.data as ColorCorrectionResult;
+  }
+
+  async applyColorCorrectionToRange(
+    startTrack: number,
+    startClip: number,
+    endTrack: number,
+    endClip: number,
+    corrections: ColorCorrections,
+    layerName?: string
+  ): Promise<ColorCorrectionRangeResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "applyColorCorrectionToRange",
+      params: {
+        startTrack,
+        startClip,
+        endTrack,
+        endClip,
+        corrections,
+        layerName,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to apply color correction to range",
+      };
+    }
+
+    return response.data as ColorCorrectionRangeResult;
+  }
+
+  async matchColor(
+    sourceTrack: number,
+    sourceClip: number,
+    destTrack: number,
+    destClip: number
+  ): Promise<ColorMatchResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "matchColor",
+      params: {
+        sourceTrack,
+        sourceClip,
+        destTrack,
+        destClip,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to match color between clips",
+      };
+    }
+
+    return response.data as ColorMatchResult;
+  }
+
+  async matchColorToAll(
+    sourceClipName: string
+  ): Promise<ColorMatchToAllResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "matchColorToAll",
+      params: {
+        sourceClipName,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to match color to all clips",
+      };
+    }
+
+    return response.data as ColorMatchToAllResult;
+  }
+
+  async applyLut(
+    targetType: "timeline_clip" | "project_item",
+    lutPath: string,
+    intensity: number = 100,
+    targetPath?: string,
+    trackIndex?: number,
+    clipIndex?: number
+  ): Promise<LutResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "applyLut",
+      params: {
+        targetType,
+        lutPath,
+        intensity,
+        targetPath,
+        trackIndex,
+        clipIndex,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to apply LUT",
+      };
+    }
+
+    return response.data as LutResult;
+  }
+
+  async getColorSettings(
+    targetType: "timeline_clip" | "project_item",
+    targetPath?: string,
+    trackIndex?: number,
+    clipIndex?: number
+  ): Promise<ColorSettingsResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "getColorSettings",
+      params: {
+        targetType,
+        targetPath,
+        trackIndex,
+        clipIndex,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to get color settings",
+      };
+    }
+
+    return response.data as ColorSettingsResult;
+  }
+
+  async removeColorEffects(
+    targetType: "timeline_clip" | "project_item",
+    effectType: "lumetri" | "lut" | "all" = "all",
+    targetPath?: string,
+    trackIndex?: number,
+    clipIndex?: number
+  ): Promise<RemoveColorEffectsResult> {
+    const response = await this.sendCommand({
+      id: uuidv4(),
+      type: "removeColorEffects",
+      params: {
+        targetType,
+        effectType,
+        targetPath,
+        trackIndex,
+        clipIndex,
+      },
+    });
+
+    if (!response.success) {
+      return {
+        success: false,
+        error: response.error || "Failed to remove color effects",
+      };
+    }
+
+    return response.data as RemoveColorEffectsResult;
   }
 
   disconnect(): void {

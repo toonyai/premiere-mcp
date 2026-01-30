@@ -120,6 +120,164 @@
                     });
                     break;
 
+                case "applyColorCorrection":
+                    var p = command.params;
+                    var script = "applyColorCorrection('" +
+                        escapeString(p.targetType) + "', '" +
+                        escapeString(JSON.stringify(p.corrections)) + "', " +
+                        (p.targetPath ? "'" + escapeString(p.targetPath) + "'" : "null") + ", " +
+                        (p.trackIndex !== undefined ? p.trackIndex : "null") + ", " +
+                        (p.clipIndex !== undefined ? p.clipIndex : "null") + ", " +
+                        (p.useAdjustmentLayer !== false ? "true" : "false") + ")";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
+                case "applyColorCorrectionToRange":
+                    var p = command.params;
+                    var script = "applyColorCorrectionToRange(" +
+                        p.startTrack + ", " +
+                        p.startClip + ", " +
+                        p.endTrack + ", " +
+                        p.endClip + ", '" +
+                        escapeString(JSON.stringify(p.corrections)) + "', " +
+                        (p.layerName ? "'" + escapeString(p.layerName) + "'" : "null") + ")";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
+                case "matchColor":
+                    var p = command.params;
+                    var script = "matchColorBetweenClips(" +
+                        p.sourceTrack + ", " +
+                        p.sourceClip + ", " +
+                        p.destTrack + ", " +
+                        p.destClip + ")";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
+                case "matchColorToAll":
+                    var p = command.params;
+                    var script = "matchColorToAll('" +
+                        escapeString(p.sourceClipName) + "')";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
+                case "applyLut":
+                    var p = command.params;
+                    var script = "applyLut('" +
+                        escapeString(p.targetType) + "', '" +
+                        escapeString(p.lutPath) + "', " +
+                        (p.intensity || 100) + ", " +
+                        (p.targetPath ? "'" + escapeString(p.targetPath) + "'" : "null") + ", " +
+                        (p.trackIndex !== undefined ? p.trackIndex : "null") + ", " +
+                        (p.clipIndex !== undefined ? p.clipIndex : "null") + ")";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
+                case "getColorSettings":
+                    var p = command.params;
+                    var script = "getColorSettings('" +
+                        escapeString(p.targetType) + "', " +
+                        (p.targetPath ? "'" + escapeString(p.targetPath) + "'" : "null") + ", " +
+                        (p.trackIndex !== undefined ? p.trackIndex : "null") + ", " +
+                        (p.clipIndex !== undefined ? p.clipIndex : "null") + ")";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
+                case "removeColorEffects":
+                    var p = command.params;
+                    var script = "removeColorEffects('" +
+                        escapeString(p.targetType) + "', '" +
+                        escapeString(p.effectType || "all") + "', " +
+                        (p.targetPath ? "'" + escapeString(p.targetPath) + "'" : "null") + ", " +
+                        (p.trackIndex !== undefined ? p.trackIndex : "null") + ", " +
+                        (p.clipIndex !== undefined ? p.clipIndex : "null") + ")";
+
+                    evalScript(script, function(result) {
+                        try {
+                            response.data = JSON.parse(result);
+                            response.success = response.data.success !== false;
+                            if (!response.success) {
+                                response.error = response.data.error;
+                            }
+                        } catch (e) {
+                            response.error = result || e.message;
+                        }
+                        sendResponse(client, response);
+                    });
+                    break;
+
                 default:
                     response.error = "Unknown command type: " + command.type;
                     sendResponse(client, response);

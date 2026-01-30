@@ -13,6 +13,22 @@ import { findSegmentsSchema, handleFindSegments } from "./tools/find-segments.js
 import { addToTimelineSchema, handleAddToTimeline } from "./tools/add-to-timeline.js";
 import { getProjectInfoSchema, handleGetProjectInfo } from "./tools/get-project-info.js";
 import { getAnalysisStatusSchema, handleGetAnalysisStatus } from "./tools/get-analysis-status.js";
+import {
+  applyColorCorrectionSchema,
+  handleApplyColorCorrection,
+  applyColorCorrectionToRangeSchema,
+  handleApplyColorCorrectionToRange,
+  matchColorSchema,
+  handleMatchColor,
+  matchColorToAllSchema,
+  handleMatchColorToAll,
+  applyLutSchema,
+  handleApplyLut,
+  getColorSettingsSchema,
+  handleGetColorSettings,
+  removeColorEffectsSchema,
+  handleRemoveColorEffects,
+} from "./tools/color-correction.js";
 
 async function main() {
   logger.info("Starting Premiere MCP Server...");
@@ -68,6 +84,56 @@ async function main() {
     "Check the status of video analysis operations. Can query by analysis ID or video path.",
     getAnalysisStatusSchema,
     async (params) => handleGetAnalysisStatus(params)
+  );
+
+  // Color Correction Tools
+  server.tool(
+    "apply_color_correction",
+    "Apply color corrections (exposure, contrast, saturation, temperature, etc.) to a clip using an adjustment layer for non-destructive editing.",
+    applyColorCorrectionSchema,
+    async (params) => handleApplyColorCorrection(params)
+  );
+
+  server.tool(
+    "apply_color_correction_to_range",
+    "Apply color corrections to multiple clips at once using a shared adjustment layer spanning all clips.",
+    applyColorCorrectionToRangeSchema,
+    async (params) => handleApplyColorCorrectionToRange(params)
+  );
+
+  server.tool(
+    "match_color",
+    "Copy color settings from a source clip to a destination clip using an adjustment layer. Useful for matching looks across clips.",
+    matchColorSchema,
+    async (params) => handleMatchColor(params)
+  );
+
+  server.tool(
+    "match_color_to_all",
+    "Match the color of ALL clips in the timeline to a source clip by name. Creates one adjustment layer spanning the entire timeline.",
+    matchColorToAllSchema,
+    async (params) => handleMatchColorToAll(params)
+  );
+
+  server.tool(
+    "apply_lut",
+    "Apply a LUT (Look Up Table) to a clip in the timeline for color grading.",
+    applyLutSchema,
+    async (params) => handleApplyLut(params)
+  );
+
+  server.tool(
+    "get_color_settings",
+    "Get the current color correction settings from a clip in the timeline.",
+    getColorSettingsSchema,
+    async (params) => handleGetColorSettings(params)
+  );
+
+  server.tool(
+    "remove_color_effects",
+    "Remove color correction effects (Lumetri Color, LUTs) from a clip in the timeline.",
+    removeColorEffectsSchema,
+    async (params) => handleRemoveColorEffects(params)
   );
 
   // Handle graceful shutdown
